@@ -3,17 +3,27 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
+	"strings"
 )
 
 func main() {
 	//вызов - go run . --"name"="Vasiliy" --age=20 --isAdmin
 	fmt.Println("новый проект")
-	name := flag.String("name", "Elena", "Имя пользователя")
-	age := flag.Int("age", 18, "Возраст пользователя")
-	isAdmin := flag.Bool("isAdmin", false, "Является админом")
+	city := flag.String("city", "", "Город пользователя")
+	format := flag.Int("format", 1, "Формат вывода погоды")
 
 	flag.Parse()
-	fmt.Println(*name)
-	fmt.Println(*age)
-	fmt.Println(*isAdmin)
+	fmt.Println(*city)
+	fmt.Println(*format)
+
+	r := strings.NewReader("Привет! я поток данных!")
+	block := make([]byte, 4)
+	for {
+		_, err := r.Read(block)
+		fmt.Printf("%q\n", block)
+		if err == io.EOF {
+			break
+		}
+	}
 }
