@@ -19,12 +19,15 @@ type CityPopulationResponce struct {
 	Error bool `json:"error"`
 }
 
+var ErrNoCity = errors.New("NOSITY")
+var ErrNot200 = errors.New("NOT200")
+
 // GetMyLocation получение погоды по локации или указанному городу
 func GetMyLocation(city string) (*Data, error) {
 	if city != "" {
 		isCity := сheckCity(city)
 		if !isCity {
-			panic("Такого города нет!")
+			return nil, ErrNoCity
 		}
 		return &Data{
 			City: city,
@@ -35,7 +38,7 @@ func GetMyLocation(city string) (*Data, error) {
 		return nil, err
 	}
 	if resp.StatusCode != 200 {
-		return nil, errors.New("NOT200")
+		return nil, ErrNot200
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
